@@ -1,0 +1,76 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Invoice {
+  id: Int!
+  referenceNumber: Int!
+  dateIssued: String!
+  dueDate: String!
+  status: String!
+  amount: String!
+  note: String!
+  user: User!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type User {
+  id: ID!
+  username: String!
+  invoices: [Invoice!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type FieldError {
+  field: String!
+  message: String!
+}
+
+type UserResponse {
+  errors: [FieldError!]
+  user: User
+  access_token: String
+}
+
+type Query {
+  users: [User!]!
+  invoices(currentPage: Int, itemsPerPage: Int, searchTerm: String): JSON!
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Mutation {
+  registerUser(createUserInput: CreateUserInput!): UserResponse!
+  loginUser(loginUserInput: CreateUserInput!): UserResponse!
+  createInvoice(createInvoiceInput: CreateInvoiceInput!): Invoice!
+  updateInvoice(updateInvoiceInput: UpdateInvoiceInput!): Invoice!
+}
+
+input CreateUserInput {
+  username: String!
+  password: String!
+}
+
+input CreateInvoiceInput {
+  referenceNumber: Float!
+  dateIssued: DateTime!
+  dueDate: DateTime!
+  status: String!
+  amount: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input UpdateInvoiceInput {
+  id: Int!
+  status: String!
+  note: String! = ""
+}
