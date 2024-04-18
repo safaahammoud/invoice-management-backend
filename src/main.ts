@@ -13,8 +13,8 @@ async function bootstrap() {
 		methods: ['GET', 'POST', 'PUT', 'DELETE'],
 	})
 
-	const dbConnection = await dataSource.initialize().catch((err) => {
-		console.log('error while connecting to DB', err)
+	await dataSource.initialize().catch((err) => {
+		console.error('error while connecting to DB', err)
 	})
 
 	await app.listen(3001)

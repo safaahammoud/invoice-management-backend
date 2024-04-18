@@ -35,6 +35,7 @@ export class InvoiceService {
 			queryBuilder
 				.where('referenceNumber like :referenceNumber', { referenceNumber: `%{searchTerm}%` })
 				.orWhere('status like :status', { status: `%${searchTerm}%` })
+				.orWhere('amount like :amount', { amount: `%${searchTerm}%` })
 		}
 
 		totalCount = await queryBuilder.getCount()

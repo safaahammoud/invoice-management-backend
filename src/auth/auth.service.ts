@@ -30,6 +30,7 @@ export class AuthService {
 			const jwtSecretKey = this.configService.get<string>('JWT_KEY')
 
 			return {
+				user,
 				access_token: await this.jwtService.sign(payload, { secret: jwtSecretKey }),
 			}
 		} else {
