@@ -1,8 +1,9 @@
+import 'dotenv/config'
+
 import { Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
+import { ConfigService } from '@nestjs/config'
 import * as argon2 from 'argon2'
-
-import 'dotenv/config'
 
 import { UserResponse } from '../user/dto/user-response'
 import { UserService } from '../user/user.service'
@@ -12,6 +13,7 @@ export class AuthService {
 	constructor(
 		private userService: UserService,
 		private jwtService: JwtService,
+		private configService: ConfigService,
 	) {}
 
 	async login(username: string, inputPassword: string): Promise<UserResponse> {
@@ -32,9 +34,10 @@ export class AuthService {
 			}
 
 			const payload = { sub: user.id, username: user.username }
+			const jwtSecretKey = this.configService.get<string>('JWT_KEY')
 
 			return {
-				access_token: await this.jwtService.sign(payload, { secret: process.env.VUE_APP_JWT_KEY }),
+				access_token: await this.jwtService.sign(payload, { secret: jwtSecretKey }),
 			}
 		} else {
 			return {

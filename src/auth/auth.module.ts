@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common'
+import { JwtModule } from '@nestjs/jwt'
+
+import 'dotenv/config'
 
 import { AuthService } from './auth.service'
 import { UserModule } from '../user/user.module'
-import 'dotenv/config'
-import { JwtModule } from '@nestjs/jwt'
 
 @Module({
 	imports: [
 		UserModule,
 		JwtModule.register({
 			global: true,
-			secret: process.env.VUE_APP_JWT_KEY,
 			signOptions: { expiresIn: '1d' },
 		}),
 	],
