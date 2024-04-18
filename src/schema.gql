@@ -23,13 +23,7 @@ type User {
   updatedAt: String!
 }
 
-type FieldError {
-  field: String!
-  message: String!
-}
-
 type UserResponse {
-  errors: [FieldError!]
   user: User
   access_token: String
 }

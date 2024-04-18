@@ -1,6 +1,6 @@
 import 'dotenv/config'
 
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { ConfigService } from '@nestjs/config'
 import * as argon2 from 'argon2'
@@ -23,14 +23,7 @@ export class AuthService {
 			const isPasswordValid = await argon2.verify(user.password, inputPassword)
 
 			if (!isPasswordValid) {
-				return {
-					errors: [
-						{
-							field: 'password',
-							message: 'Incorrect password',
-						},
-					],
-				}
+				throw new BadRequestException('Incorrect password')
 			}
 
 			const payload = { sub: user.id, username: user.username }
@@ -40,14 +33,7 @@ export class AuthService {
 				access_token: await this.jwtService.sign(payload, { secret: jwtSecretKey }),
 			}
 		} else {
-			return {
-				errors: [
-					{
-						field: 'username',
-						message: 'Username doesnt exist, try to register before logging',
-					},
-				],
-			}
+			throw new BadRequestException('Username doesnt exist, try to register before logging')
 		}
 	}
 
@@ -55,36 +41,15 @@ export class AuthService {
 		const user = await this.userService.findOneByUsername(username)
 
 		if (user) {
-			return {
-				errors: [
-					{
-						field: 'username',
-						message: 'Username already exist',
-					},
-				],
-			}
+			throw new BadRequestException('Username already exist')
 		}
 
 		if (username.length <= 2) {
-			return {
-				errors: [
-					{
-						field: 'username',
-						message: 'Username should have length greater than 2',
-					},
-				],
-			}
+			throw new BadRequestException('Username should have length greater than 2')
 		}
 
 		if (password.length <= 3) {
-			return {
-				errors: [
-					{
-						field: 'password',
-						message: 'Password should have length greater than 3',
-					},
-				],
-			}
+			throw new BadRequestException('Password should have length greater than 3')
 		}
 
 		const hashedPassword = await argon2.hash(password)
